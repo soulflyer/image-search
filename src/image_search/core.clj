@@ -6,10 +6,47 @@
                                     preference]]
             [monger
              [collection :as mc]
-             [core :as mg]])
+             [core :as mg]]
+            [clojure.string :refer [replace]])
   (:gen-class))
+
+(def database "photos")
+(def keyword-collection "keywords")
+(def preferences-collection "preferences")
+(def image-collection "images")
+(def connection (mg/connect))
+(def db (mg/get-db connection database))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!"))
+
+(defn gt [meta-key meta-value image-seq]
+  (filter #(< (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
+
+(defn lt [meta-key meta-value image-seq]
+  (filter #(> (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
+
+(defn ge [meta-key meta-value image-seq]
+  (filter #(<= (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
+
+(defn le [meta-key meta-value image-seq]
+  (filter #(>= (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
+
+(defmulti string-number-equals
+  "a version of = that can compare numbers, strings or one of each"
+  (fn [x y] (and (instance? String x) (instance? String y))))
+(defmethod string-number-equals false [x y]
+  (= (bigdec x) (bigdec y)))
+(defmethod string-number-equals true [x y]
+  (= x y))
+
+(defn eq [meta-key meta-value image-seq]
+  (filter #(string-number-equals (meta-key %) meta-value) image-seq))
+
+(find-images db image-collection "ISO-Speed-Ratings" "640")
+(map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
+(set (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640")))
+(filter #(string-number-equals (:Project %) "10-Road") (find-images db image-collection "ISO-Speed-Ratings" "640"))
+(eq :Project "10-Road" (find-images db image-collection "ISO-Speed-Ratings" "640"))
