@@ -2,6 +2,7 @@
   (:require [image-lib.core :refer [find-images
                                     find-all-images
                                     image-path
+                                    image-paths
                                     best-image
                                     preference]]
             [monger
@@ -16,6 +17,7 @@
 (def image-collection "images")
 (def connection (mg/connect))
 (def db (mg/get-db connection database))
+(def all-images (mc/find-maps db image-collection))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -36,11 +38,18 @@
 
 (defmulti string-number-equals
   "a version of = that can compare numbers, strings or one of each"
-  (fn [x y] (and (instance? String x) (instance? String y))))
-(defmethod string-number-equals false [x y]
+  (fn [x y] (cond
+             (or (nil? x) (nil? y)) :empty
+             (and (instance? String x) (instance? String y)) :2strings
+             :else :other)))
+(defmethod string-number-equals :other [x y]
   (= (bigdec x) (bigdec y)))
-(defmethod string-number-equals true [x y]
+(defmethod string-number-equals :2strings [x y]
   (= x y))
+(defmethod string-number-equals :empty [x y]
+  (cond (and (nil? x) (nil? y)) true
+        (or (= "" x) (= "" y)) true
+        :else false))
 
 (defn eq [meta-key meta-value image-seq]
   (filter #(string-number-equals (meta-key %) meta-value) image-seq))
