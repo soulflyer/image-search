@@ -16,9 +16,9 @@ or fire up emacs and cider
 
 ## Examples
 
-(-> all-images
-    (eq :ISO-Speed-Ratings 640)
-    (eq :Exposure-Time 160))
+    (-> all-images
+        (eq :ISO-Speed-Ratings 640)
+        (eq :Exposure-Time 160))
         
 ## License
 
