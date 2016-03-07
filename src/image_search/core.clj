@@ -40,7 +40,7 @@
   "returns a number when given a string. Leading and trailing text and anything before a / character is removed"
   [x]
   (replace
-   (re-find #"[\d/]+" x)
+   (re-find #"[\d/]+" (str x))
    #"^.+/"
    ""))
 
@@ -51,7 +51,7 @@
              (and (instance? String x) (instance? String y)) :2strings
              :else :other)))
 (defmethod string-number-equals :other [x y]
-  (= (bigdec (clean-number-string (str x))) (bigdec (clean-number-string (str y)))))
+  (= (bigdec (clean-number-string x)) (bigdec (clean-number-string y))))
 (defmethod string-number-equals :2strings [x y]
   (= x y))
 (defmethod string-number-equals :empty [x y]
@@ -59,7 +59,7 @@
         (or (= "" x) (= "" y)) true
         :else false))
 
-(defn eq [meta-key meta-value image-seq]
+(defn eq [image-seq meta-key meta-value]
   (filter #(string-number-equals (meta-key %) meta-value) image-seq))
 
 (find-images db image-collection "ISO-Speed-Ratings" "640")
@@ -68,3 +68,13 @@
 (filter #(string-number-equals (:Project %) "10-Road") (find-images db image-collection "ISO-Speed-Ratings" "640"))
 (eq :Project "10-Road" (find-images db image-collection "ISO-Speed-Ratings" "640"))
 (replace (re-find #"[\d/]+" "100px") #"^.+/" "")
+
+(count (eq
+        (eq
+         all-images
+         :ISO-Speed-Ratings 640)
+        :Exposure-Time 160))
+
+(-> all-images
+    (eq :ISO-Speed-Ratings 640)
+    (eq :Exposure-Time 160))
