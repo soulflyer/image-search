@@ -1,36 +1,28 @@
 # image-search
 
-FIXME: description
+Searches a mongo database for images with specified metadata
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from http://github.com/soulflyer/image-search
 
 ## Usage
 
-FIXME: explanation
+Currently only useful from the repl so do:
 
-    $ java -jar image-search-0.1.0-standalone.jar [args]
+lein repl
 
-## Options
-
-FIXME: listing of options this app accepts.
+or fire up emacs and cider
 
 ## Examples
 
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
+(-> all-images
+    (eq :ISO-Speed-Ratings 640)
+    (eq :Exposure-Time 160))
+        
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 Iain Wood
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
