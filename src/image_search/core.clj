@@ -24,25 +24,15 @@
   [& args]
   (println "Hello, World!"))
 
-(defn gt [meta-key meta-value image-seq]
-  (filter #(< (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
-
-(defn lt [meta-key meta-value image-seq]
-  (filter #(> (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
-
-(defn ge [meta-key meta-value image-seq]
-  (filter #(<= (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
-
-(defn le [meta-key meta-value image-seq]
-  (filter #(>= (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
-
 (defn clean-number-string
   "returns a number when given a string. Leading and trailing text and anything before a / character is removed"
   [x]
-  (replace
-   (re-find #"[\d/]+" (str x))
-   #"^.+/"
-   ""))
+  (if (and x (not (= x "")))
+    (replace
+     (re-find #"[\d/]+" (str x))
+     #"^.+/"
+     "")
+    ""))
 
 (defmulti string-number-equals
   "a version of = that can compare numbers, strings or one of each"
@@ -61,6 +51,38 @@
 
 (defn eq [image-seq meta-key meta-value]
   (filter #(string-number-equals (meta-key %) meta-value) image-seq))
+
+(defn gt [image-seq meta-key meta-value]
+  (filter #(let [db-value (meta-key %)]
+             (if db-value
+               (>  (bigdec (clean-number-string (meta-key %)))
+                   (bigdec (clean-number-string meta-value)))
+               false))
+          image-seq))
+
+(defn lt [image-seq meta-key meta-value]
+  (filter #(let [db-value (meta-key %)]
+             (if db-value
+               (<  (bigdec (clean-number-string db-value))
+                   (bigdec (clean-number-string meta-value)))
+               false))
+          image-seq))
+
+(defn ge [image-seq meta-key meta-value]
+  (filter #(let [db-value (meta-key %)]
+             (if db-value
+               (>= (bigdec (clean-number-string db-value))
+                   (bigdec (clean-number-string meta-value)))
+               false))
+          image-seq))
+
+(defn le [image-seq meta-key meta-value]
+  (filter #(if (meta-key %)
+             (<= (bigdec (clean-number-string (meta-key %)))
+                 (bigdec (clean-number-string meta-value)))
+             false)
+          image-seq))
+
 
 (find-images db image-collection "ISO-Speed-Ratings" "640")
 (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
