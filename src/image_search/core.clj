@@ -36,6 +36,14 @@
 (defn le [meta-key meta-value image-seq]
   (filter #(>= (bigdec (meta-key %)) (bigdec meta-value)) image-seq))
 
+(defn clean-number-string
+  "returns a number when given a string. Leading and trailing text and anything before a / character is removed"
+  [x]
+  (replace
+   (re-find #"[\d/]+" x)
+   #"^.+/"
+   ""))
+
 (defmulti string-number-equals
   "a version of = that can compare numbers, strings or one of each"
   (fn [x y] (cond
@@ -43,7 +51,7 @@
              (and (instance? String x) (instance? String y)) :2strings
              :else :other)))
 (defmethod string-number-equals :other [x y]
-  (= (bigdec x) (bigdec y)))
+  (= (bigdec (clean-number-string (str x))) (bigdec (clean-number-string (str y)))))
 (defmethod string-number-equals :2strings [x y]
   (= x y))
 (defmethod string-number-equals :empty [x y]
@@ -59,3 +67,4 @@
 (set (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640")))
 (filter #(string-number-equals (:Project %) "10-Road") (find-images db image-collection "ISO-Speed-Ratings" "640"))
 (eq :Project "10-Road" (find-images db image-collection "ISO-Speed-Ratings" "640"))
+(replace (re-find #"[\d/]+" "100px") #"^.+/" "")
