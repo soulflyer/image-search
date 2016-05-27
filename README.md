@@ -61,4 +61,4 @@ Take a look in play.clj for further examples.
 
 Copyright © 2016 Iain Wood
 
-Distributed under the Eclipse Public License either version 1.0
+Distributed under the Eclipse Public License version 1.0
