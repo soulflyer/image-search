@@ -53,8 +53,10 @@
 (defn eq [image-seq meta-key meta-value]
   (filter #(string-number-equals (meta-key %) meta-value) image-seq))
 
-(defmulti contains (fn [haystack needle]
-                      (class haystack)))
+(defmulti contains
+  "returns true if haystack contains needle. This is case insensitive and matches substrings if haystack is a string"
+  (fn [haystack needle]
+    (class haystack)))
 (defmethod contains java.lang.String
   [haystack needle]
   (if (re-find (re-pattern (str "(?i)" needle)) haystack)
@@ -67,8 +69,9 @@
   [haystack needle]
   false)
 
-(defn in [image-seq meta-key meta-value]
+(defn in
   "filter passes any entry that contains the given string"
+  [image-seq meta-key meta-value]
   (filter #(contains (meta-key %) meta-value)
           image-seq))
 
@@ -122,8 +125,11 @@
     (eq :Exposure-Time 160))
 
 (-> all-images
-    (in :Model "Nikon")
+    (in :Model "NIK")
     (eq :Year 2015)
+    count)
+(-> all-images
+    (in :Keywords "Me")
     count)
 
 (map image-path (-> all-images (lt :ISO-Speed-Ratings 64)))
