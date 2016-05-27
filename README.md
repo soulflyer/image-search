@@ -2,7 +2,7 @@
 
 Searches a mongo database for images with specified metadata. Certain assumptions are made about the files containing the pics:
 
-The pictures are stored in various sizes. In each size, the last part of the pathname is of the form: yyyy/mm/dd<project name>
+The pictures are stored in various sizes. In each size, the last part of the pathname is of the form: yyyy/mm/dd-project-name
 
 There is a directory for each of thumbnail, medium, large and fullsize pictures. These directories are specified in the preferences collection in the database.
 
@@ -61,5 +61,4 @@ Take a look in play.clj for further examples.
 
 Copyright © 2016 Iain Wood
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Eclipse Public License either version 1.0
