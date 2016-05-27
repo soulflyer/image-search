@@ -4,7 +4,8 @@
                                     image-path
                                     image-paths
                                     best-image
-                                    preference]]
+                                    preference
+                                    find-sub-keywords]]
             [monger
              [collection :as mc]
              [core :as mg]]
@@ -52,6 +53,30 @@
 (defn eq [image-seq meta-key meta-value]
   (filter #(string-number-equals (meta-key %) meta-value) image-seq))
 
+;; (defmulti contains
+;;   "returns true if second parameter is in the first, either as an array member or a substring"
+;;   (fn [field content] (if (= field :Keywords) ;; This should be checking if we have a vector or a string
+;;                        :kw
+;;                        :other)))
+
+(defmulti contains (fn [haystack needle]
+                      (class haystack)))
+(defmethod contains java.lang.String
+  [haystack needle]
+  (if (re-find (re-pattern needle) haystack)
+    true
+    false))
+(defmethod contains clojure.lang.Sequential
+  [haystack needle]
+  (contains? (set haystack) needle))
+(defmethod contains nil
+  [haystack needle]
+  false)
+(defn in [image-seq meta-key meta-value]
+  "filter passes any entry that contains the given string"
+  (filter #(contains (meta-key %) meta-value)
+          image-seq))
+
 (defn gt [image-seq meta-key meta-value]
   (filter #(let [db-value (meta-key %)]
              (if db-value
@@ -88,7 +113,7 @@
 (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
 (set (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640")))
 (filter #(string-number-equals (:Project %) "10-Road") (find-images db image-collection "ISO-Speed-Ratings" "640"))
-(eq :Project "10-Road" (find-images db image-collection "ISO-Speed-Ratings" "640"))
+(eq (find-images db image-collection "ISO-Speed-Ratings" "640") :Project "10-Road")
 (replace (re-find #"[\d/]+" "100px") #"^.+/" "")
 
 (count (eq
@@ -100,3 +125,11 @@
 (-> all-images
     (eq :ISO-Speed-Ratings 640)
     (eq :Exposure-Time 160))
+
+(map image-path (-> all-images (lt :ISO-Speed-Ratings 64)))
+(map image-path (-> all-images
+                    (lt :ISO-Speed-Ratings 64)
+                    (ge :Exposure-Time 4000)))
+
+(find-sub-keywords db keyword-collection "Iain Wood")
+(if (re-find #"the" "hello hello") true false)
