@@ -9,6 +9,11 @@
             [monger
              [collection :as mc]
              [core :as mg]]
+            [clojure.string :refer [join
+                                    replace]]
+
+
+            [clojure.java.shell :refer [sh]]
             [clojure.string :refer [replace]])
   (:gen-class))
 
@@ -16,9 +21,14 @@
 (def keyword-collection "keywords")
 (def preferences-collection "preferences")
 (def image-collection "images")
-(def connection (mg/connect))
-(def db (mg/get-db connection database))
-(def all-images (mc/find-maps db image-collection))
+(def connection      (mg/connect))
+(def db              (mg/get-db connection database))
+(def all-images      (mc/find-maps db image-collection))
+(def thumbnail       (preference db "preferences" "thumbnail-directory"))
+(def medium          (preference db "preferences"    "medium-directory"))
+(def large           (preference db "preferences"     "large-directory"))
+(def fullsize        (preference db "preferences"  "fullsize-directory"))
+(def external-viewer (preference db "preferences"     "external-viewer"))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -106,6 +116,10 @@
              false)
           image-seq))
 
+(defn open [pics size]
+  (sh "xargs" external-viewer
+      :in (join " " (map #(str size "/" %)
+                         (map image-path pics)))))
 
 (find-images db image-collection "ISO-Speed-Ratings" "640")
 (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
@@ -113,6 +127,7 @@
 (filter #(string-number-equals (:Project %) "10-Road") (find-images db image-collection "ISO-Speed-Ratings" "640"))
 (eq (find-images db image-collection "ISO-Speed-Ratings" "640") :Project "10-Road")
 (replace (re-find #"[\d/]+" "100px") #"^.+/" "")
+
 
 (count (eq
         (eq
@@ -122,15 +137,18 @@
 
 (-> all-images
     (eq :ISO-Speed-Ratings 640)
-    (eq :Exposure-Time 160))
+    (eq :Exposure-Time 160)
+    (open medium))
 
 (-> all-images
     (in :Model "NIK")
     (eq :Year 2015)
     count)
-(-> all-images
-    (in :Keywords "Me")
-    count)
+
+(sh "xargs" external-viewer :in
+    (join " " (map #(str medium-dir "/" %)
+                   (map image-path (-> all-images
+                                       (in :Keywords "Me"))))))
 
 (map image-path (-> all-images (lt :ISO-Speed-Ratings 64)))
 (map image-path (-> all-images
