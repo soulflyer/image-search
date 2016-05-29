@@ -9,6 +9,7 @@
             [image-search.core :refer [in eq lt le gt ge
                                        or and
                                        open
+                                       find
                                        database
                                        image-collection
                                        keyword-collection
@@ -57,7 +58,7 @@
 (-> all-images
     (in :Model "phone")
     (eq :Year 2015)
-    count)
+    first)
 
 (class (-> all-images
      (in :Model "Nik")
@@ -67,7 +68,8 @@
 (-> all-images
     (or
      (in :Model "phone")
-     (eq :ISO-Speed-Ratings 640))
+     (eq :ISO-Speed-Ratings 640)
+     (in :Model "Nik"))
     count)
 
 ;; and and. and is not necessary normally. Using -> with a series of filters is
@@ -78,5 +80,13 @@
     (or
      (in :Model "phone")
      (and (in :Model "Nik")
-          (eq :Year 2015)))
+          (eq :Year 2015)
+          (eq :Year 2016)))
+    count)
+
+;; find can be used instead of -> all-images
+(find
+    (and (in :Model "Nik")
+         (eq :ISO-Speed-Ratings 100)
+         (in :Model "phone"))
     count)

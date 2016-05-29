@@ -117,10 +117,16 @@
       :in (join " " (map #(str size "/" %)
                          (map image-path pics)))))
 
-(defmacro or [coll form1 form2]
-  `(union (-> ~coll ~form1)
-          (-> ~coll ~form2)))
 
-(defmacro and [coll form1 form2]
-  `(-> ~coll ~form1 ~form2)
+(defmacro or [coll & forms]
+  (if (seq forms)
+    `(union (-> ~coll ~(first forms)) (or ~coll ~@(rest forms)))
+    #{}))
+
+(defmacro and [& forms]
+  `(-> ~@forms)
 )
+
+(defmacro find [& forms]
+  `(-> all-images
+       ~@forms))
