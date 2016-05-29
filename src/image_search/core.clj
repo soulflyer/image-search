@@ -1,20 +1,16 @@
 (ns image-search.core
-  (:require [image-lib.core :refer [find-images
-                                    find-all-images
-                                    image-path
-                                    image-paths
-                                    best-image
-                                    preference
-                                    find-sub-keywords]]
-            [monger
-             [collection :as mc]
-             [core :as mg]]
-            [clojure.string :refer [join
-                                    replace]]
-
-
+  (:require [image-lib.core     :refer [find-images
+                                        find-all-images
+                                        image-path
+                                        image-paths
+                                        best-image
+                                        preference
+                                        find-sub-keywords]]
+            [monger                    [collection :as mc]
+                                       [core :as mg]]
+            [clojure.string     :refer [join replace]]
             [clojure.java.shell :refer [sh]]
-            [clojure.string :refer [replace]])
+            [clojure.set        :refer [union]])
   (:gen-class))
 
 (def database "photos")
@@ -80,7 +76,7 @@
   false)
 
 (defn in
-  "filter passes any entry that contains the given string"
+  "returns a sequence containing all entries of image-seq where meta-key contains meta-value"
   [image-seq meta-key meta-value]
   (filter #(contains (meta-key %) meta-value)
           image-seq))
@@ -120,3 +116,11 @@
   (sh "xargs" external-viewer
       :in (join " " (map #(str size "/" %)
                          (map image-path pics)))))
+
+(defmacro or [coll form1 form2]
+  `(union (-> ~coll ~form1)
+          (-> ~coll ~form2)))
+
+(defmacro and [coll form1 form2]
+  `(-> ~coll ~form1 ~form2)
+)

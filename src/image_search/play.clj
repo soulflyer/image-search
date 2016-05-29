@@ -7,6 +7,7 @@
                                     preference
                                     find-sub-keywords]]
             [image-search.core :refer [in eq lt le gt ge
+                                       or and
                                        open
                                        database
                                        image-collection
@@ -28,7 +29,7 @@
 ;; just one piece of information:
 (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
 
-;; In the case of :Project, it is probabl more useful to turn the
+;; In the case of :Project, it is probably more useful to turn the
 ;; sequence into a set:
 (set (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640")))
 
@@ -54,6 +55,28 @@
 ;; Note that if we use in to search a metadata field that contains a
 ;; string, we can use an incomplete case insensitive string
 (-> all-images
-    (in :Model "NIK")
+    (in :Model "phone")
     (eq :Year 2015)
+    count)
+
+(class (-> all-images
+     (in :Model "Nik")
+     (eq :Year 2015)))
+
+;; We can also use or
+(-> all-images
+    (or
+     (in :Model "phone")
+     (eq :ISO-Speed-Ratings 640))
+    count)
+
+;; and and. and is not necessary normally. Using -> with a series of filters is
+;; effectiely doing an and. However it can be specified so that it can be used
+;; inside an or.
+
+(-> all-images
+    (or
+     (in :Model "phone")
+     (and (in :Model "Nik")
+          (eq :Year 2015)))
     count)
