@@ -48,12 +48,46 @@ This will open all the images in the list. The size of image is selected with th
 
     (open images medium)
     
-## Examples
+## find
+
+Shorthand for -> all-images. These are the same query:
 
     (-> all-images
+      (eq :ISO-Speed-Ratings 640)
+      (eq :Exposure-Time 160)
+      (open medium))
+
+    (find
+      (eq :ISO-Speed-Ratings 640)
+      (eq :Exposure-Time 160)
+      (open medium))
+
+## or and
+
+Chaining the forms as above is effectively doing an and. We can also do an or like this:
+
+    (find
+      (or
         (eq :ISO-Speed-Ratings 640)
-        (eq :Exposure-Time 160)
-        (open medium))
+        (eq :Exposure-Time 160)))
+        
+Because or expects a series of forms, we can no longer chain them to get an assumed and. If we need to nest an and inside an or, it must be done specifically, like this:
+
+    (find
+      (or
+        (eq :ISO-Speed-Ratings 640)
+        (and
+          (eq :Exposure-Time 160)
+          (in :Model "phone")))
+      (open medium))
+
+                            
+## Examples
+
+    (find
+      (eq :ISO-Speed-Ratings 640)
+      (eq :Exposure-Time 160)
+      (open medium))
         
 Take a look in play.clj for further examples.
         
