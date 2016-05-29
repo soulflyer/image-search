@@ -50,7 +50,7 @@ This will open all the images in the list. The size of image is selected with th
     
 ## find
 
-Shorthand for -> all-images. These are the same query:
+find is shorthand for -> all-images. These are the same query:
 
     (-> all-images
       (eq :ISO-Speed-Ratings 640)
