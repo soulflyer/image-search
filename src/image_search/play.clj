@@ -5,10 +5,14 @@
                                     image-paths
                                     best-image
                                     preference
+                                    preferences
+                                    preference!
                                     find-sub-keywords]]
             [image-search.core :refer [in eq lt le gt ge
                                        or and
                                        open
+                                       paths
+                                       write
                                        find
                                        database
                                        image-collection
@@ -90,3 +94,12 @@
          (eq :ISO-Speed-Ratings 100)
          (in :Model "phone"))
     count)
+
+;; We can also output a list of pictures to a file. Note that the file is not
+;; emptied first, up to you to rm it, if thats what you want. This example also uses
+;; paths, which just outputs the path of each pic
+
+(find
+ (in :Model "phone")
+ (paths)
+ (write "/tmp/phone-pics"))

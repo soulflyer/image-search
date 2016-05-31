@@ -81,7 +81,19 @@ Because or expects a series of forms, we can no longer chain them to get an assu
           (in :Model "phone")))
       (open medium))
 
-                            
+## paths
+
+Returns only the path of each image in the collection
+
+## write
+
+Outputs the collection to a file. It doesn't delete the contents if the file already exists.
+
+    (find
+      (in :Model "phone")
+      (paths)
+      (write "/tmp/phone-pics"))
+      
 ## Examples
 
     (find

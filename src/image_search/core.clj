@@ -5,6 +5,8 @@
                                         image-paths
                                         best-image
                                         preference
+                                        preferences
+                                        preference!
                                         find-sub-keywords]]
             [monger                    [collection :as mc]
                                        [core :as mg]]
@@ -116,6 +118,16 @@
   (sh "xargs" external-viewer
       :in (join " " (map #(str size "/" %)
                          (map image-path pics)))))
+
+(defn paths
+  "given a collection of pics, return just the paths"
+  [pics]
+  (map image-path pics))
+
+(defn write
+  "Append the collection 'things' to file 'file-name' one per line"
+  [things file-name]
+  (map #(spit file-name (str % "\n") :append true) things))
 
 
 (defmacro or [coll & forms]
