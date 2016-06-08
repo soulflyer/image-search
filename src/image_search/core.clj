@@ -10,10 +10,31 @@
                                         find-sub-keywords]]
             [monger                    [collection :as mc]
                                        [core :as mg]]
-            [clojure.string     :refer [join replace]]
+            ;;[clojure.string     :refer [join replace]]
+            [clojure.string     :as str]
             [clojure.java.shell :refer [sh]]
-            [clojure.set        :refer [union]])
+            [clojure.set        :refer [union]]
+            [clojure.tools.cli  :refer :all])
   (:gen-class))
+
+(def cli-options
+  [["-c" "--count" "Counts the results"]
+   ["-D" "--database DATABASE" "specifies database to use"
+    :default "photos"]
+   ["-I" "--image-collection IMAGE-COLLECTION" "specifies the image collection"
+    :default "images"]
+   ["-K" "--keyword-collection KEYWORD-COLLECTION" "specifies the keyword collection"
+    :default "keywords"]
+   ["-h" "--help"]
+   ["-i" "--iso ISO" "Search on ISO value"]
+   ["-s" "--shutter SHUTTER-SPEED" "search on SHUTTER-SPEED"]
+   ["-f" "--aperture APERTURE" "search on APERTURE"]
+   ["-y" "--year YEAR" "search on YEAR"]
+   ["-m" "--month MONTH" "search on MONTH"]
+   ["-M" "--model MODEL" "search by camera model"]
+   ["-p" "--project PROJECT" "search photos in PROJECT"]
+   ["-k" "--keyword KEYWORD" "search for KEYWORD"]])
+
 
 (def database "photos")
 (def keyword-collection "keywords")
@@ -28,19 +49,18 @@
 (def fullsize        (preference db "preferences"  "fullsize-directory"))
 (def external-viewer (preference db "preferences"     "external-viewer"))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+
 
 (defn clean-number-string
   "returns a number when given a string. Leading and trailing text and anything before a / character is removed"
   [x]
   (if (and x (not (= x "")))
-    (replace
-     (re-find #"[\d/]+" (str x))
-     #"^.+/"
-     "")
+    ;; This regex pulls out a substing containing only digits and dots.
+    (re-find #"[\d\.]+"
+             (str/replace (str x)
+                      ;;This regex removes a leading 1/ or f/
+                      #"^[fF1]/"
+                      ""))
     ""))
 
 (defmulti string-number-equals
@@ -114,10 +134,13 @@
              false)
           image-seq))
 
-(defn open [pics size]
-  (sh "xargs" external-viewer
-      :in (join " " (map #(str size "/" %)
-                         (map image-path pics)))))
+(defn open
+  ([pics]
+   (open pics medium))
+  ([pics size]
+   (sh "xargs" external-viewer
+       :in (str/join " " (map #(str size "/" %)
+                          (map image-path pics))))))
 
 (defn paths
   "given a collection of pics, return just the paths"
@@ -142,3 +165,53 @@
 (defmacro find [& forms]
   `(-> all-images
        ~@forms))
+
+(defn ifeq
+  [a b & c]
+  (if (nil? (first c))
+    a
+    (eq a b c)))
+
+(defn ifin
+  [a b & c]
+  (if (nil? (first c))
+    a
+    (in a b (first c))))
+
+(defn print-count [pics]
+  (println (count pics)))
+
+(defn -main
+  "I don't do a whole lot ... yet."
+  [& args]
+  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
+        output-function (if (:count options) print-count open)]
+    ;; (println (str "output-function " output-function))
+    (if (:help options)
+      (println (str "Usage:\nfind-images [options] keyword\n\nvoptions:\n" summary)))
+    (if (:iso options)
+      (println (str "ISO " (:iso options))))
+    (if (:shutter options)
+      (println (str "Shutter speed " (:shutter options))))
+    (if (:aperture options)
+      (println (str "Aperture " (:aperture options))))
+    (if (:year options)
+      (println (str "Year " (:year options))))
+    (if (:month options)
+      (println (str "Month " (:month options))))
+    (if (:project options)
+      (println (str "Project " (:project options))))
+    (if (:keyword  options)
+      (println (str "Keyword " (:keyword options))))
+
+    (if (:count options)
+      (println "Count selected"))
+    (-> all-images
+        (ifeq :ISO-Speed-Ratings   (:iso options))
+        (ifeq :Year               (:year options))
+        (ifeq :Month             (:month options))
+        (ifin :Project         (:project options))
+        (ifeq :F-Number       (:aperture options))
+        (ifin :Keywords        (:keyword options))
+        (ifin :Model             (:model options))
+        (output-function))))
