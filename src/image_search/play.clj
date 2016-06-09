@@ -13,7 +13,7 @@
                                        open
                                        paths
                                        write
-                                       find
+                                       images
                                        database
                                        image-collection
                                        keyword-collection
@@ -88,8 +88,8 @@
           (eq :Year 2016)))
     count)
 
-;; find can be used instead of -> all-images
-(find
+;; images can be used instead of -> all-images
+(images
     (and (in :Model "Nik")
          (eq :ISO-Speed-Ratings 100)
          (in :Model "phone"))
@@ -99,7 +99,7 @@
 ;; emptied first, up to you to rm it, if thats what you want. This example also uses
 ;; paths, which just outputs the path of each pic
 
-(find
+(images
  (in :Model "phone")
  (paths)
  (write "/tmp/phone-pics"))

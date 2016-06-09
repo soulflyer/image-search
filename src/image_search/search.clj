@@ -12,7 +12,7 @@
                                        or and
                                        open
                                        paths
-                                       find
+                                       images
                                        database
                                        image-collection
                                        keyword-collection
@@ -24,15 +24,15 @@
                                        fullsize]]))
 ;; Being a collection of useful searches. Start up cider and hit C-c C-c
 
-(map image-path (find
+(map image-path (images
                  (eq :ISO-Speed-Ratings 640)))
 
-(find
+(images
  (in :Model "phone")
  (eq :Year 2015)
  (paths))
 
-(find
+(images
  (in :Model "phone")
  (eq :Year 2015)
  (open medium))
