@@ -1,6 +1,6 @@
 (ns image-search.command-line
   (:refer-clojure :exclude [or and])
-  (:require [image-search.core :refer [open all-images ifeq ifin ]]
+  (:require [image-search.core :refer [open all-images eq in ]]
             [clojure.tools.cli  :refer :all])
   (:gen-class))
 
@@ -34,11 +34,11 @@
     (if (:help options)
       (println (str "Usage:\nfind-images [options] keyword\n\nvoptions:\n" summary))
       (-> all-images
-          (ifeq :ISO-Speed-Ratings   (:iso options))
-          (ifeq :Year               (:year options))
-          (ifeq :Month             (:month options))
-          (ifin :Project         (:project options))
-          (ifeq :F-Number       (:aperture options))
-          (ifin :Keywords        (:keyword options))
-          (ifin :Model             (:model options))
+          (eq :ISO-Speed-Ratings   (:iso options))
+          (eq :Year               (:year options))
+          (eq :Month             (:month options))
+          (in :Project         (:project options))
+          (eq :F-Number       (:aperture options))
+          (in :Keywords        (:keyword options))
+          (in :Model             (:model options))
           (output-function)))))

@@ -17,10 +17,10 @@
             [clojure.tools.cli  :refer :all])
   (:gen-class))
 
-(def database "photos")
-(def keyword-collection "keywords")
+(def database               "photos")
+(def keyword-collection     "keywords")
 (def preferences-collection "preferences")
-(def image-collection "images")
+(def image-collection       "images")
 (def connection      (mg/connect))
 (def db              (mg/get-db connection database))
 (def all-images      (mc/find-maps db image-collection))
@@ -57,8 +57,17 @@
         (clojure.core/or (= "" x) (= "" y)) true
         :else false))
 
-(defn eq [image-seq meta-key meta-value]
-  (filter #(string-number-equals (meta-key %) meta-value) image-seq))
+(defn eq [image-seq meta-key & meta-value]
+  ;; If the last param is nil or missing, just return the image-seq
+  (if (nil? (first meta-value))
+    image-seq
+    (filter #(string-number-equals (meta-key %) meta-value) image-seq)))
+
+;; (defn ifeq
+;;   [a b & c]
+;;   (if (nil? (first c))
+;;     a
+;;     (eq a b c)))
 
 (defmulti contains
   "returns true if haystack contains needle. This is case insensitive and matches substrings if haystack is a string"
@@ -78,9 +87,11 @@
 
 (defn in
   "returns a sequence containing all entries of image-seq where meta-key contains meta-value"
-  [image-seq meta-key meta-value]
-  (filter #(contains (meta-key %) meta-value)
-          image-seq))
+  [image-seq meta-key & meta-value]
+  (if (nil? (first meta-value))
+    image-seq
+    (filter #(contains (meta-key %) (first meta-value))
+                 image-seq)))
 
 (defn gt [image-seq meta-key meta-value]
   (filter #(let [db-value (meta-key %)]
@@ -144,15 +155,3 @@
 (defmacro images [& forms]
   `(-> all-images
        ~@forms))
-
-(defn ifeq
-  [a b & c]
-  (if (nil? (first c))
-    a
-    (eq a b c)))
-
-(defn ifin
-  [a b & c]
-  (if (nil? (first c))
-    a
-    (in a b (first c))))
