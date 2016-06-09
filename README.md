@@ -16,11 +16,19 @@ Download from http://github.com/soulflyer/image-search
 
 ## Usage
 
-Currently only useful from the repl so do:
+### Command line
 
-lein repl
+image-search can be called from the command line for simple queries. This one will return a count of all images taken in 2015 with an ISO of 640
 
-or fire up emacs and cider
+    find-images -c -y 2015 -i 640
+    
+To see all the available options do this:
+
+    find-images -h
+
+### Repl 
+
+For more complex queries use find-images as a clojure library .The files play.clj and search.clj are good startoing points.
 
 ## Setup
 
@@ -48,7 +56,7 @@ This will open all the images in the list. The size of image is selected with th
 
     (open images medium)
     
-## find
+## images
 
 find is shorthand for -> all-images. These are the same query:
 
@@ -57,7 +65,7 @@ find is shorthand for -> all-images. These are the same query:
       (eq :Exposure-Time 160)
       (open medium))
 
-    (find
+    (images
       (eq :ISO-Speed-Ratings 640)
       (eq :Exposure-Time 160)
       (open medium))
@@ -66,14 +74,14 @@ find is shorthand for -> all-images. These are the same query:
 
 Chaining the forms as above is effectively doing an and. We can also do an or like this:
 
-    (find
+    (images
       (or
         (eq :ISO-Speed-Ratings 640)
         (eq :Exposure-Time 160)))
         
 Because or expects a series of forms, we can no longer chain them to get an assumed and. If we need to nest an and inside an or, it must be done specifically, like this:
 
-    (find
+    (images
       (or
         (eq :ISO-Speed-Ratings 640)
         (and
@@ -89,14 +97,14 @@ Returns only the path of each image in the collection
 
 Outputs the collection to a file. It doesn't delete the contents if the file already exists.
 
-    (find
+    (images
       (in :Model "phone")
       (paths)
       (write "/tmp/phone-pics"))
       
 ## Examples
 
-    (find
+    (images
       (eq :ISO-Speed-Ratings 640)
       (eq :Exposure-Time 160)
       (open medium))
