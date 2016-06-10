@@ -142,6 +142,11 @@
   [things file-name]
   (map #(spit file-name (str % "\n") :append true) things))
 
+(defn overwrite
+  "Write the collection to a file, clearing it first"
+  [things file-name]
+  (spit file-name "" :append false)
+  (write things file-name))
 
 (defmacro or [coll & forms]
   (if (seq forms)
