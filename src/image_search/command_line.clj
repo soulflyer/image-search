@@ -45,7 +45,13 @@
                           print-paths)]
 
     (if (:help options)
-      (println (str "Usage:\nfind-images [options] keyword\n\nvoptions:\n" summary))
+      (println (str
+                "Does simple searches for images using the most popular exif/iptc data\n"
+                "and Year, Month. Project values.\n"
+                "For more complex searches involving nested AND and OR or more esoteric\n"
+                "exif/iptc data, start the repl and use the image-search.core library.\n\n"
+                "Usage:\nimage-search [options] keyword\n\nvoptions:\n"
+                summary))
       (-> all-images
           (eq :ISO-Speed-Ratings   (:iso options))
           (eq :Year               (:year options))
