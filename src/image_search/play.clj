@@ -1,29 +1,25 @@
 (ns image-search.play
-  (:require [image-lib.core :refer [find-images
-                                    find-all-images
-                                    image-path
-                                    image-paths
-                                    best-image
-                                    preference
-                                    preferences
-                                    preference!
-                                    find-sub-keywords]]
-            [image-search.core :refer [in eq lt le gt ge
-                                       or and
-                                       open
-                                       paths
-                                       write
-                                       images
-                                       database
-                                       image-collection
-                                       keyword-collection
-                                       db
-                                       all-images
-                                       thumbnail
-                                       medium
-                                       large
-                                       fullsize
-                                       ]]))
+  (:require [image-lib.images      :refer [find-images]]
+            [image-lib.core        :refer [find-all-images best-image]]
+            [image-lib.keywords    :refer [find-sub-keywords]]
+            [image-lib.helper      :refer [image-path image-paths]]
+            [image-lib.preferences :refer [preference preference! preferences]]
+            [image-lib.search      :refer [in eq lt le gt ge
+                                           or and ]]
+            [image-lib.file-helper :refer [write]]
+            [image-search.core     :refer [
+                                           open
+                                           images
+                                           database
+                                           image-collection
+                                           keyword-collection
+                                           db
+                                           all-images
+                                           thumbnail
+                                           medium
+                                           large
+                                           fullsize
+                                           ]]))
 
 ;; The main functions from image-lib are available here:
 (find-images db image-collection "ISO-Speed-Ratings" "640")
@@ -72,8 +68,8 @@
 (-> all-images
     (or
      (in :Model "phone")
-     (eq :ISO-Speed-Ratings 640)
      (in :Model "Nik"))
+    (eq :ISO-Speed-Ratings 640)
     count)
 
 ;; and and. and is not necessary normally. Using -> with a series of filters is
@@ -91,8 +87,7 @@
 ;; images can be used instead of -> all-images
 (images
     (and (in :Model "Nik")
-         (eq :ISO-Speed-Ratings 100)
-         (in :Model "phone"))
+         (eq :ISO-Speed-Ratings 100))
     count)
 
 ;; We can also output a list of pictures to a file. Note that the file is not
@@ -101,5 +96,5 @@
 
 (images
  (in :Model "phone")
- (paths)
+ (image-paths)
  (write "/tmp/phone-pics"))

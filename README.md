@@ -28,7 +28,7 @@ To see all the available options do this:
 
 ### Repl 
 
-For more complex queries use find-images as a clojure library .The files play.clj and search.clj are good startoing points.
+For more complex queries use find-images as a clojure library .The files play.clj and search.clj are good starting points.
 
 ## Setup
 
@@ -47,7 +47,7 @@ filters "images" selecting all where the contents of the metadata field match "v
 
     (in images metadata-field value)
     
-This will filter images returning all where metadata-field contains value. If metadata-field contains a string, then it will match if value is a substring of the metadata string. This is a case INsensitive match.
+This will filter images returning all where metadata-field contains value. If metadata-field contains a string, then it will match if value is a substring of the metadata string. This is a case insensitive match.
 If metadate-field is a collection then an exact case sensitive match to one of the members is needed.
 
 ### open
@@ -58,7 +58,7 @@ This will open all the images in the list. The size of image is selected with th
     
 ## images
 
-find is shorthand for -> all-images. These are the same query:
+images is shorthand for -> all-images. These are the same query:
 
     (-> all-images
       (eq :ISO-Speed-Ratings 640)

@@ -1,6 +1,8 @@
 (ns image-search.command-line
   (:refer-clojure :exclude [or and])
-  (:require [image-search.core :refer [open all-images paths eq in ]]
+  (:require [image-search.core :refer [open all-images]]
+            [image-lib.search  :refer [eq in]]
+            [image-lib.helper  :refer [image-paths]]
             [clojure.tools.cli  :refer :all])
   (:gen-class))
 
@@ -29,7 +31,7 @@
 (defn print-paths
   "doc-string"
   [images]
-  (doall (map println (paths images))))
+  (doall (map println (image-paths images))))
 
 
 (defn -main
