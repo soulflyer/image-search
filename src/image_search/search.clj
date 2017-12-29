@@ -1,17 +1,12 @@
 (ns image-search.search
-  (:require [image-lib.core :refer [find-images
-                                    find-all-images
-                                    image-path
-                                    image-paths
-                                    best-image
-                                    preference
-                                    preferences
-                                    preference!
-                                    find-sub-keywords]]
-            [image-search.core :refer [in eq lt le gt ge
-                                       or and
-                                       open
-                                       paths
+  (:require [image-lib.images :refer [find-images]]
+            [image-lib.core :refer [find-all-images best-image]]
+            [image-lib.keywords :refer [find-sub-keywords]]
+            [image-lib.helper :refer [image-path image-paths]]
+            [image-lib.preferences :refer [preference preferences preference!]]
+            [image-lib.search :refer [in eq lt le gt ge
+                                      or and]]
+            [image-search.core :refer [open
                                        images
                                        database
                                        image-collection
@@ -30,7 +25,7 @@
 (images
  (in :Model "phone")
  (eq :Year 2015)
- (paths))
+ (image-paths))
 
 (images
  (in :Model "phone")

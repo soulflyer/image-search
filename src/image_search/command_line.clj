@@ -33,6 +33,10 @@
   [images]
   (doall (map println (image-paths images))))
 
+(defn open-and-exit [images]
+  (doall
+    (open images)
+    (shutdown-agents)))
 
 (defn -main
   "Searches for image details from a mongo database"
@@ -42,7 +46,7 @@
                           (:count options)
                           print-count
                           (:open options)
-                          open
+                          open-and-exit
                           :else
                           print-paths)]
 

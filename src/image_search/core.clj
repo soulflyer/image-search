@@ -25,10 +25,6 @@
   ([pics]
    (open pics medium))
   ([pics size]
-   ;; (doall (sh "xargs" external-viewer
-   ;;      :in (str/join " " (map #(str size "/" %)
-   ;;                             (map image-path pics))))
-   ;;        (shutdown-agents)))
    (open-images pics size external-viewer)))
 
 (defmacro images [& forms]
