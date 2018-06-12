@@ -87,8 +87,8 @@
 ;; images can be used instead of -> all-images
 (images
     (and (in :Model "Nik")
-         (eq :ISO-Speed-Ratings 100))
-    count)
+         (eq :ISO-Speed-Ratings 640))
+    (open medium))
 
 ;; We can also output a list of pictures to a file. Note that the file is not
 ;; emptied first, up to you to rm it, if thats what you want. This example also uses
