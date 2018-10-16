@@ -56,7 +56,7 @@
                 "and Year, Month. Project values.\n"
                 "For more complex searches involving nested AND and OR or more esoteric\n"
                 "exif/iptc data, start the repl and use the image-search.core library.\n\n"
-                "Usage:\nimage-search [options] keyword\n\nvoptions:\n"
+                "Usage:\nimage-search [options] keyword\n\nOptions:\n"
                 summary))
       (-> all-images
           (eq :ISO-Speed-Ratings   (:iso options))

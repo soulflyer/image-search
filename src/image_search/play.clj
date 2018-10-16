@@ -1,6 +1,6 @@
 (ns image-search.play
-  (:require [image-lib.images      :refer [find-images]]
-            [image-lib.core        :refer [find-all-images best-image]]
+  (:require [image-lib.images      :refer [find-images find-all-images]]
+            [image-lib.core        :refer [best-image]]
             [image-lib.keywords    :refer [find-sub-keywords]]
             [image-lib.helper      :refer [image-path image-paths]]
             [image-lib.preferences :refer [preference preference! preferences]]
@@ -78,17 +78,16 @@
 
 (-> all-images
     (or
-     (in :Model "phone")
-     (and (in :Model "Nik")
-          (eq :Year 2015)
-          (eq :Year 2016)))
+      (in :Model "phone")
+      (and (in :Model "Nik")
+           (eq :Year 2016)))
     count)
 
 ;; images can be used instead of -> all-images
 (images
-    (and (in :Model "Nik")
-         (eq :ISO-Speed-Ratings 640))
-    (open medium))
+  (and (in :Model "Nik")
+       (eq :ISO-Speed-Ratings 640))
+  (open medium))
 
 ;; We can also output a list of pictures to a file. Note that the file is not
 ;; emptied first, up to you to rm it, if thats what you want. This example also uses

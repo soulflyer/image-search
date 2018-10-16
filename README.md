@@ -4,9 +4,7 @@ Searches a mongo database for images with specified metadata. Certain assumption
 
 The pictures are stored in various sizes. In each size, the last part of the pathname is of the form: yyyy/mm/dd-project-name
 
-There is a directory for each of thumbnail, medium, large and fullsize pictures. These directories are specified in the preferences collection in the database.
-
-The database is mongo. It contains collections for the images, the keywords and the preferences. The keyword collection is a heirarchy, and searching for a keyword using image search will search for images containing that keyword or any of its sub keywords.
+The mongo database contains collections for the images, the keywords and the preferences. The keyword collection is a heirarchy, and searching for a keyword using image search will search for images containing that keyword or any of its sub keywords.
 
 Check out my other projects for more info on creating and maintaining the database.
 
@@ -110,9 +108,13 @@ Outputs the collection to a file. It doesn't delete the contents if the file alr
       (open medium))
         
 Take a look in play.clj for further examples.
-        
+
+## TODO
+
+Add an option to the command line version to allow selecting by rating or keyword.
+
+Add the ability to search for an incomplete keyword (or offer completions).
+
 ## License
 
 Copyright © 2016 Iain Wood
-
-Distributed under the Eclipse Public License version 1.0
