@@ -8,6 +8,7 @@
             [image-lib.images      :refer [open-images]])
   (:gen-class))
 
+
 (def database               "photos")
 (def keyword-collection     "keywords")
 (def preferences-collection "preferences")
@@ -21,12 +22,19 @@
 (def fullsize        (preference db "preferences"  "fullsize-directory"))
 (def external-viewer (preference db "preferences"     "external-viewer"))
 
+
 (defn open
   ([pics]
    (open pics medium))
   ([pics size]
    (open-images pics size external-viewer)))
 
+
+(defmacro images-> [& forms]
+  `(-> all-images
+     ~@forms))
+
+
 (defmacro images [& forms]
   `(-> all-images
-       ~@forms))
+     ~@forms))
