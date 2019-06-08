@@ -18,11 +18,11 @@ Download from http://github.com/soulflyer/image-search
 
 image-search can be called from the command line for simple queries. This one will return a count of all images taken in 2015 with an ISO of 640
 
-    find-images -c -y 2015 -i 640
+    image-search -c -y 2015 -i 640
     
 To see all the available options do this:
 
-    find-images -h
+    image-search -h
 
 ### Repl 
 
