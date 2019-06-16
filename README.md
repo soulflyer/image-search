@@ -6,11 +6,11 @@ The pictures are stored in various sizes. In each size, the last part of the pat
 
 The mongo database contains collections for the images, the keywords and the preferences. The keyword collection is a heirarchy, and searching for a keyword using image search will search for images containing that keyword or any of its sub keywords.
 
-Check out my other projects for more info on creating and maintaining the database.
+Check out my other projects for more info on creating and maintaining the database. Image-search is basically a wrapper for the [image-lib project](http://github.com/soulflyer/image-lib)
 
 ## Installation
 
-Download from http://github.com/soulflyer/image-search
+Download from <http://github.com/soulflyer/image-search>
 
 ## Usage
 

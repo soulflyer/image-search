@@ -7,7 +7,7 @@
             [image-lib.preferences :refer [preference preference! preferences]]
             [image-lib.search      :refer [in eq lt le gt ge
                                            or and ]]
-            [image-lib.file-helper :refer [write]]
+            [image-lib.file        :refer [write]]
             [image-search.core     :refer [all-images
                                            database
                                            db
@@ -106,7 +106,7 @@
     (write "/tmp/phone-pics"))
 
   (images
-    (in :Keywords "Ceratasoma trilobatum")
+    (in :Keywords "Ceratosoma trilobatum")
     (image-paths)
     (write "/tmp/ceratasoma.txt"))
 
