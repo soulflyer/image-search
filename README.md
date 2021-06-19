@@ -39,7 +39,7 @@ These all take the same form:
 
     (eq images meta-data-field value)
     
-filters "images" selecting all where the contents of the metadata field match "value". Most of them only make sense with numbers. Numbers will be cleaned up, ie 1/100 will be read as 100 and any leading or trailing text will be removed. eq can also be used with strings, although the in might be a better choice.
+filters "images" selecting all where the contents of the metadata field match "value". Most of them only make sense with numbers. Numbers will be cleaned up, ie 1/100 will be read as 100 and any leading or trailing text will be removed. eq can also be used with strings, although the in function might be a better choice.
 
 ### in
 
