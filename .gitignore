@@ -12,3 +12,4 @@ pom.xml.asc
 .#*
 .tmux
 .clj-kondo/.cache
+.envrc

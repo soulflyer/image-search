@@ -16,7 +16,9 @@ Download from <http://github.com/soulflyer/image-search>
 
 ### Command line
 
-image-search can be called from the command line for simple queries. This one will return a count of all images taken in 2015 with an ISO of 640
+image-search can be called from the command line for simple queries. I build it with `lein bin` which creates the executable and moves it to `~/bin/image-search`. It can also be built using `lein uberjar` and run with `java -jar target/image-search-0.1.0-standalone.jar` or something similar.
+
+This one will return a count of all images taken in 2015 with an ISO of 640
 
     image-search -c -y 2015 -i 640
     
@@ -56,9 +58,14 @@ This will open all the images in the list. The size of image is selected with th
     
 ## images
 
-images is shorthand for -> all-images. These are the same query:
+images-> and images are shorthand for -> all-images. These are the same query:
 
     (-> all-images
+      (eq :ISO-Speed-Ratings 640)
+      (eq :Exposure-Time 160)
+      (open medium))
+
+    (images->
       (eq :ISO-Speed-Ratings 640)
       (eq :Exposure-Time 160)
       (open medium))
@@ -67,7 +74,7 @@ images is shorthand for -> all-images. These are the same query:
       (eq :ISO-Speed-Ratings 640)
       (eq :Exposure-Time 160)
       (open medium))
-
+      
 ## or and
 
 Chaining the forms as above is effectively doing an and. We can also do an or like this:
@@ -117,4 +124,4 @@ Add the ability to search for an incomplete keyword (or offer completions).
 
 ## License
 
-Copyright © 2016 Iain Wood
+Copyright © 2016-2023 Iain Wood
