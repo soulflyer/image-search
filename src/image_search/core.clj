@@ -1,10 +1,7 @@
 (ns image-search.core
   (:refer-clojure :exclude [or and])
   (:require [monger                [collection :as mc] [core :as mg]]
-            [clojure.string        :as str]
-            [clojure.java.shell    :refer [sh]]
             [image-lib.preferences :refer [preference]]
-            [image-lib.helper      :refer [image-path]]
             [image-lib.images      :refer [open-images]])
   (:gen-class))
 

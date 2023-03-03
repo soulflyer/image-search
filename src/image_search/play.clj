@@ -13,6 +13,7 @@
                                            db
                                            fullsize
                                            image-collection
+                                           images->
                                            images
                                            keyword-collection
                                            large
@@ -38,7 +39,7 @@
   (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640"))
 
   ;; In the case of :Project, it is probably more useful to turn the
-  ;; sequence into a set:
+  ;; sequence into a set (careful, project names may not be unique):
   (set (map :Project (find-images db image-collection "ISO-Speed-Ratings" "640")))
 
   ;; We can also use the eq ge lt etc functions to filter a list of images
@@ -86,11 +87,12 @@
   (-> all-images
     (or
       (in :Model "phone")
-      (and (in :Model "Nik")
+      (and
+        (in :Model "Nik")
         (eq :Year 2016)))
     count)
 
-  ;; images can be used instead of -> all-images
+  ;; images or images-> can be used instead of -> all-images
   (images
     (and (in :Model "Nik")
       (eq :ISO-Speed-Ratings 640))
@@ -100,7 +102,7 @@
   ;; emptied first, up to you to rm it, if thats what you want. This example also uses
   ;; paths, which just outputs the path of each pic
 
-  (images
+  (images->
     (in :Model "phone")
     (image-paths)
     (write "/tmp/phone-pics"))

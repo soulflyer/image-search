@@ -1,0 +1,3 @@
+{:hooks {:analyze-call {image-search.core/images   hooks.images/images
+                        image-search.core/images-> hooks.images/images}}}
+

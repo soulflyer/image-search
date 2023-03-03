@@ -1,9 +1,9 @@
 (ns image-search.command-line
   (:refer-clojure :exclude [or and])
-  (:require [image-search.core :refer [open all-images]]
-            [image-lib.search  :refer [eq in]]
+  (:require [clojure.tools.cli :refer [parse-opts]]
             [image-lib.helper  :refer [image-paths]]
-            [clojure.tools.cli  :refer :all])
+            [image-lib.search  :refer [eq in]]
+            [image-search.core :refer [open all-images]])
   (:gen-class))
 
 (def cli-options
@@ -41,7 +41,7 @@
 (defn -main
   "Searches for image details from a mongo database"
   [& args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)
+  (let [{:keys [options summary]} (parse-opts args cli-options)
         output-function (cond
                           (:count options)
                           print-count
