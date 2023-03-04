@@ -7,7 +7,7 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/tools.cli "1.0.214"]
                  [org.slf4j/slf4j-nop "2.0.6"]
-                 [image-lib "0.2.5-SNAPSHOT"]]
+                 [image-lib "0.2.5"]]
 
   :main image-search.command-line
   :bin {:name "image-search"

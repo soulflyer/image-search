@@ -1,7 +1,7 @@
 (ns image-search.play
   (:refer-clojure :exclude [and or])
-  (:require [image-lib.images      :refer [find-images find-all-images]]
-            [image-lib.core        :refer [best-image]]
+  (:require [image-lib.images      :refer [find-images]]
+            [image-lib.core        :refer [best-image best-sub-image]]
             [image-lib.keywords    :refer [find-sub-keywords]]
             [image-lib.helper      :refer [image-path image-paths]]
             [image-lib.preferences :refer [preference preference! preferences]]
@@ -9,7 +9,6 @@
                                            or and ]]
             [image-lib.file        :refer [write]]
             [image-search.core     :refer [all-images
-                                           database
                                            db
                                            fullsize
                                            image-collection
@@ -44,6 +43,11 @@
 
   ;; We can also use the eq ge lt etc functions to filter a list of images
   (eq (find-images db image-collection "ISO-Speed-Ratings" "640") :Project "10-Road")
+
+  ;; we can get the best image for a given keyword. `best-sub-image` searches in the
+  ;; nested keywords too.
+  (best-image db image-collection "Eukaryotes")
+  (best-sub-image db image-collection keyword-collection "Eukaryotes")
 
   ;; Rather than start with a find-images function and filter it, it may be
   ;; easier to start with the all-images function and just use a sucession
@@ -92,15 +96,42 @@
         (eq :Year 2016)))
     count)
 
-  ;; images or images-> can be used instead of -> all-images
+  ;; images or images-> can be used instead of -> all-images and open will use
+  ;; the OS Default viewer to open the files
   (images
     (and (in :Model "Nik")
-      (eq :ISO-Speed-Ratings 640))
+         (eq :ISO-Speed-Ratings 640))
+    (open thumbnail))
+  (images
+    (and (in :Model "Nik")
+         (eq :ISO-Speed-Ratings 640))
     (open medium))
+  (images
+    (and (in :Model "Nik")
+         (eq :ISO-Speed-Ratings 640))
+    (open large))
+  (images
+    (and (in :Model "Nik")
+         (eq :ISO-Speed-Ratings 640))
+    (open fullsize))
+
+  ;; There are logical operators for numeric fields
+  (images->
+    (gt :ISO-Speed-Ratings 800)
+    count)
+  (images->
+    (ge :ISO-Speed-Ratings 800)
+    count)
+  (images->
+    (lt :ISO-Speed-Ratings 50)
+    count)
+  (images->
+    (le :ISO-Speed-Ratings 50)
+    count)
 
   ;; We can also output a list of pictures to a file. Note that the file is not
   ;; emptied first, up to you to rm it, if thats what you want. This example also uses
-  ;; paths, which just outputs the path of each pic
+  ;; image-paths, which just outputs the path of each pic
 
   (images->
     (in :Model "phone")
@@ -116,4 +147,13 @@
     (in :Keywords "Unidentified nudibranch")
     (image-paths)
     (write "/tmp/unidentified-nudibranch.txt"))
+
+  ;; image-path is used to get the path from a single image entry
+  (image-path
+    (first (images->
+            (and (in :Model "Nik")
+                 (eq :ISO-Speed-Ratings 640)))))
+  (images
+    (eq :Year 2022)
+    count)
   )
