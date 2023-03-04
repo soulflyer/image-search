@@ -1,4 +1,4 @@
-(defproject image-search "0.2.0"
+(defproject image-search "0.3.0-SNAPSHOT"
   :description "Search for images containing specific metadata"
   :url "http://github.com/soulflyer/image-search"
   :license {:name "Eclipse Public License"
