@@ -1,3 +1,6 @@
+;;(:lint-as {images-> clojure.core/->})
+;; {:linters
+;;  {:use {:level :off}}}
 {:hooks {:analyze-call {image-search.core/images   hooks.images/images
                         image-search.core/images-> hooks.images/images}}}
 

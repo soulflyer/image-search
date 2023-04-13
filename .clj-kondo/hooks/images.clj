@@ -13,18 +13,4 @@
     {:node new-node}))
 
 (comment
-  (images  (in :Keywords "Ceratosoma trilobatum")
-           (image-paths)
-           (write "/tmp/ceratasoma.txt"))
-  (list* (api/token-node '->)
-         (list* {:a 1})
-         (in :Keywords "Ceratosoma trilobatum")
-         (image-paths)
-         (write "/tmp/ceratasoma.txt")
-         )
-  (list*
-    (api/token-node '->)
-    [{:a 1}]
-    "forms"
-    )
   )
